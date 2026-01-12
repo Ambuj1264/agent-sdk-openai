@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { main } from './agents/tool';
-import { agentmanger } from './agents/agent_manager';
+import { agentmanger } from './agents/multiAgent/agent_manager';
 
 @Injectable()
 export class AppService {
