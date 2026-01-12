@@ -1,7 +1,9 @@
 import { Agent, run, tool } from '@openai/agents';
-import { z } from 'zod';
 import fs from 'node:fs/promises';
+import { z } from 'zod';
+import { RECOMMENDED_PROMPT_PREFIX } from '@openai/agents-core/extensions';
 
+// refund agent
 const fetchAvailablePlan = tool({
     name: 'fetch available plans',
     description: 'Fetch the available internet broadband plans for the user',
@@ -32,13 +34,14 @@ const proccessRefund = tool({
     }
 })
 
-
 const refundAgent = new Agent({
     name: 'refund agent',
     instructions: " you are expert in issuing refunds to the customer.",
     tools: [proccessRefund],
 
 })
+
+
 const salesAgent = new Agent({
     name: 'sales agent',
     instructions: "you are an expert sales agent for  an internet broadband company. talk to the user and help them with what they need.",
@@ -48,10 +51,13 @@ const salesAgent = new Agent({
 })
 
 
-const runAgent = async (param: string) => {
-    console.log(`Running sales agent with param: ${param}`);
-    const result = await run(salesAgent, param);
+const receptionAgent = new Agent({
+    name: 'reception agent',
+    instructions: RECOMMENDED_PROMPT_PREFIX + " you are the customer facing agent expert in understanding what the customer needs route then or handoff them to right agent.",
+    handoffDescription: "you have two agent is availabe :    1. sales agent : you can help the customer with sales related queries like fetching available plans , process refund etc. 2. refund agent : you can help the customer with refund related queries only.",
+    handoffs: [salesAgent, refundAgent],
+})
+export const RecipientAgent = async (query: string) => {
+    const result = await run(receptionAgent, query);
     return result.finalOutput;
 }
-
-export { runAgent as agentmanger };

@@ -17,6 +17,10 @@ export class AppController {
         return this.appService.getAgent(query);
     }
 
+    @Get("agent-handoff")
+    async getAgentHandoff(@Query("query") query: string) {
+        return this.appService.gethandoff(query);
+    }
     @Get("hello")
     async getHello() {
         return this.appService.getHello();

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { main } from './agents/tool';
 import { agentmanger } from './agents/multiAgent/agent_manager';
+import { RecipientAgent } from './agents/handoff/agentHandoff';
 
 @Injectable()
 export class AppService {
@@ -15,6 +16,10 @@ export class AppService {
 
     async getAgent(query: string = '') {
         const result = await agentmanger(query);
+        return { message: result };
+    }
+    async gethandoff(query: string = '') {
+        const result = await RecipientAgent(query);
         return { message: result };
     }
 }
