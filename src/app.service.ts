@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { Agent, run } from '@openai/agents';
-
+import { main } from './agents/tool';
+import { agentmanger } from './agents/agent_manager';
 
 @Injectable()
 export class AppService {
-    async getHello() {
-        const agent = new Agent({
-            name: 'Assistant',
-            instructions: 'You are a helpful assistant',
-        });
+    async getWeather(city: string = 'New York') {
+        const result = await main(city);
+        return { message: result };
+    }
 
-        const result = await run(
-            agent,
-            'Write a haiku about recursion in programming.',
-        );
-        // console.log(result.finalOutput);
-        return { message: result.finalOutput };
+    async getHello() {
+        return { message: 'Hello World!' };
+    }
+
+    async getAgent(query: string = '') {
+        const result = await agentmanger(query);
+        return { message: result };
     }
 }
