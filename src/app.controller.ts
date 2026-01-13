@@ -21,6 +21,19 @@ export class AppController {
     async getAgentHandoff(@Query("query") query: string) {
         return this.appService.gethandoff(query);
     }
+
+
+    @Get("math-agent")
+    async getMathAgent(@Query("query") query: string) {
+        return this.appService.getMathAgent(query);
+    }
+
+
+    @Get("sql-agent")
+    async getSqlAgent(@Query("query") query: string) {
+        return this.appService.getSqlAgent(query);
+    }
+    
     @Get("hello")
     async getHello() {
         return this.appService.getHello();
